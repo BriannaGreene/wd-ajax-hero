@@ -57,70 +57,25 @@
   };
 
   // ADD YOUR CODE HERE
-  // Listen for submissions on the search form. Remember to prevent the default action.
-  // Validate the user input is not blank.
 
-
-  // TURN OFF DEFAULT BUTTON FUNCTION
-  $('#submit-button').click(function(e){e.preventDefault()})
-
-  let orignialMovies = []
-
-  $('#submit-button').click(function() {
+  $('#submit-button').click(function(e) {
+    e.preventDefault()
     let search = $('#search').val()
-    if (search !== '') {
-      search = search.replace(/\s/g,"%20")
-    }
-    
-    $.getJSON(`https://omdb-api.now.sh/?s=${search}`, function(data) {
-      orignialMovies = data['Search']
-      return orignialMovies
+    if (search !== '') { search = search.replace(/\s/g,"%20") }
+
+    let json = $.getJSON(`https://omdb-api.now.sh/?s=${search}`)
+    json.done(function(data) {
+      movies = data['Search'].map((obj) => {
+        return {
+          title: obj['Title'],
+          poster: obj['Poster'],
+          id: obj['imdbID'],
+          year: obj['Year']
+        }
       })
-    cleanUpArray(orignialMovies)
-    renderMovies()
-    console.log(movies)
-  })
-
-  function cleanUpArray(arr) {
-    movies = arr.map((obj) => {
-      return {
-        title: obj['Title'],
-        poster: obj['Poster'],
-        id: obj['imdbID'],
-        year: obj['Year']
-      }
+      renderMovies()
     })
-    return movies
-  }
-
-
-
-
-  // function getData(search) {
-  //   $.getJSON(`https://omdb-api.now.sh/?s=${search}`, function(data) {
-  //     orignialMovies = data['Search']
-  //     // console.log(globalMovies)
-  //   })
-  //   return globalMovies
-  // }
-
-
-
-
-
-
-  // Clear the previous search results.
-  // Send an HTTP request to the OMDB API search endpoint.
-  // The API requires a key so you will need to send requests to this url instead:
-  // https://omdb-api.now.sh/
-  // Example: https://omdb-api.now.sh/?s=star%20wars
-  // Handle the HTTP response by pushing a new, well-formed movie object into the global movies array.
-  // Render the movies array to the page by calling the renderMovies() function with no arguments
-
-
-
-
-
+  })
 
 
 })();
