@@ -57,4 +57,72 @@
   };
 
   // ADD YOUR CODE HERE
+  // Listen for submissions on the search form. Remember to prevent the default action.
+  // Validate the user input is not blank.
+
+
+  // TURN OFF DEFAULT BUTTON FUNCTION
+  $('#submit-button').click(function(e){e.preventDefault()})
+
+  let globalMovies = []
+  let newArray
+
+  $('#submit-button').click(function() {
+    let search = $('#search').val()
+    if (search !== '') {
+      search = search.replace(/\s/g,"%20")
+    }
+    getData(search)
+  })
+
+
+  function getData(el) {
+    $.getJSON(`https://omdb-api.now.sh/?s=${search}`, function(data) {
+      globalMovies = data['Search']
+      console.log(globalMovies)
+
+      // newArray = globalMovies.map((obj) => {
+      //   return {
+      //     title: obj['Title'],
+      //     poster: obj['Poster'],
+      //     id: obj['imdbID'],
+      //     year: obj['Year']
+      //   }
+      //   console.log(newArray)
+      //
+      // })
+    })
+  }
+
+
+
+//   function cleanUpArray(arr) {
+//     newArray = arr.map((obj) => {
+//       return {
+//         title: obj['Title'],
+//         poster: obj['Poster'],
+//         id: obj['imdbID'],
+//         year: obj['Year']
+//       }
+//     })
+//     console.log(newArray)
+//   }
+// console.log(cleanUpArray(globalMovies))
+
+
+
+  // Clear the previous search results.
+  // Send an HTTP request to the OMDB API search endpoint.
+  // The API requires a key so you will need to send requests to this url instead:
+  // https://omdb-api.now.sh/
+  // Example: https://omdb-api.now.sh/?s=star%20wars
+  // Handle the HTTP response by pushing a new, well-formed movie object into the global movies array.
+  // Render the movies array to the page by calling the renderMovies() function with no arguments
+
+
+
+
+
+
+
 })();
