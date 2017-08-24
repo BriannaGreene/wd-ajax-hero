@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const movies = [];
+  let movies = [];
 
   const renderMovies = function() {
     $('#listings').empty();
@@ -64,50 +64,48 @@
   // TURN OFF DEFAULT BUTTON FUNCTION
   $('#submit-button').click(function(e){e.preventDefault()})
 
-  let globalMovies = []
-  let newArray
+  let orignialMovies = []
 
   $('#submit-button').click(function() {
     let search = $('#search').val()
     if (search !== '') {
       search = search.replace(/\s/g,"%20")
     }
-    getData(search)
+    
+    $.getJSON(`https://omdb-api.now.sh/?s=${search}`, function(data) {
+      orignialMovies = data['Search']
+      return orignialMovies
+      })
+    cleanUpArray(orignialMovies)
+    renderMovies()
+    console.log(movies)
   })
 
-
-  function getData(el) {
-    $.getJSON(`https://omdb-api.now.sh/?s=${search}`, function(data) {
-      globalMovies = data['Search']
-      console.log(globalMovies)
-
-      // newArray = globalMovies.map((obj) => {
-      //   return {
-      //     title: obj['Title'],
-      //     poster: obj['Poster'],
-      //     id: obj['imdbID'],
-      //     year: obj['Year']
-      //   }
-      //   console.log(newArray)
-      //
-      // })
+  function cleanUpArray(arr) {
+    movies = arr.map((obj) => {
+      return {
+        title: obj['Title'],
+        poster: obj['Poster'],
+        id: obj['imdbID'],
+        year: obj['Year']
+      }
     })
+    return movies
   }
 
 
 
-//   function cleanUpArray(arr) {
-//     newArray = arr.map((obj) => {
-//       return {
-//         title: obj['Title'],
-//         poster: obj['Poster'],
-//         id: obj['imdbID'],
-//         year: obj['Year']
-//       }
-//     })
-//     console.log(newArray)
-//   }
-// console.log(cleanUpArray(globalMovies))
+
+  // function getData(search) {
+  //   $.getJSON(`https://omdb-api.now.sh/?s=${search}`, function(data) {
+  //     orignialMovies = data['Search']
+  //     // console.log(globalMovies)
+  //   })
+  //   return globalMovies
+  // }
+
+
+
 
 
 
